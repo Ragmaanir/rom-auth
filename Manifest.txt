@@ -1,0 +1,8 @@
+.autotest
+History.txt
+Manifest.txt
+README.txt
+Rakefile
+bin/rom/auth
+lib/rom/auth.rb
+test/test_rom/auth.rb
