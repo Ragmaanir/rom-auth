@@ -7,10 +7,14 @@ ENV['ROM_AUTH_ENV'] = 'test'
 
 RSpec.configure do |c|
   include Wrong::Assert
-  #c.filter_run :focus => true
+  Wrong.config.colors
+  c.filter_run :focus => true
+  c.run_all_when_everything_filtered = true
 
   c.before do
-    @constants = Object.constants
+    #@constants = Object.constants
+    conn = Sequel.connect('sqlite:memory')
+    conn.tables.each{ |t| conn.drop_table?(t) }
   end
 
   c.after do

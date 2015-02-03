@@ -1,34 +1,30 @@
 describe ROM::Auth::Plugins::AuthenticationEventsPlugin do
-  let(:setup) { ROM.setup(:sql, "sqlite::memory") }
-
-  before do
-    # FIXME required to reset configuration
-    ROM::Auth.configure do
-    end
-  end
+  let(:setup)       { ROM.setup(:sql, "sqlite::memory") }
+  let(:connection)  { setup.default.connection }
 
   it '#configure plugin' do
-    ROM::Auth.configure do |c|
-      c.plugin(:authentication_events) do |c|
+    config = ROM::Auth::Configuration.new do |c|
+      c.plugin(described_class) do |c|
         c.table_name = 'lolerskates'
       end
     end
 
-    ROM::Auth.initialize
+    system = ROM::Auth::AuthenticationSystem.new(config)
 
-    assert{ ROM::Auth.loaded_plugins.keys == [:authentication_events] }
-    assert{ ROM::Auth.loaded_plugins[:authentication_events].configuration.table_name == :lolerskates }
+    assert{ system.plugins.keys == [described_class] }
+    assert{ system.plugins[described_class].configuration.table_name == :lolerskates }
   end
 
   it '#migrate' do
-    ROM::Auth.configure do |c|
-      c.plugin(:authentication_events) do |c|
+    config = ROM::Auth::Configuration.new do |c|
+      c.plugin(described_class) do |c|
         c.table_name = 'lolerskates'
       end
     end
 
-    ROM::Auth.initialize
-    ROM::Auth.migrate(setup)
+    system = ROM::Auth::AuthenticationSystem.new(config)
+    system.migrate!(setup)
+
     ROM.finalize
 
     assert{
@@ -39,17 +35,34 @@ describe ROM::Auth::Plugins::AuthenticationEventsPlugin do
   end
 
   it 'ROM::Auth#authenticate' do
-    ROM::Auth.configure do |c|
-      c.plugin(:authentication_events) do |c|
+    config = ROM::Auth::Configuration.new do |c|
+      c.plugin(described_class) do |c|
         c.table_name = :auth_events
       end
     end
 
-    ROM::Auth.initialize
-    ROM::Auth.migrate(setup)
-    ROM.finalize
+    connection.create_table(:users) do
+      primary_key :id
+    end
 
-    ROM::Auth.authenticate()
+    system = ROM::Auth::AuthenticationSystem.new(config)
+    system.migrate!(setup)
+
+    rom = ROM.finalize.env
+
+    connection[:users].insert(id: 1)
+    user = double(:user, id: 1)
+
+    auths = rom.read(:auth_events)
+
+    assert{ system.authenticate(:password, user, 'somepassword') }
+    assert{ auths.count == 1 }
+
+    event = auths.first
+    assert{ event.authenticator == 'password' }
+    assert{ event.authenticated == true }
+    assert{ event.success == true }
+    assert{ event.user_id == 1 }
   end
 
 end

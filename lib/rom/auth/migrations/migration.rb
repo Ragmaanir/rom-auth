@@ -1,10 +1,10 @@
 module ROM::Auth
   module Migrations
     class Migration
-      attr_reader :auth, :setup, :config
+      attr_reader :system, :setup, :config
 
-      def initialize(auth, setup, config)
-        @auth = auth
+      def initialize(system, setup, config)
+        @system = system
         @setup = setup
         @config = config
       end

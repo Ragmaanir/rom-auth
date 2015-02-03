@@ -7,8 +7,8 @@ module ROM::Auth
         attribute :table_name, Symbol, default: :authentication_events
       end
 
-      def install
-        ROM::Auth.include(CallbackOverrides)
+      def install(system)
+        system.extend(CallbackOverrides)
 
         config = configuration
 
@@ -29,12 +29,12 @@ module ROM::Auth
       end
 
       def migrate(setup)
-        AuthenticationEventsMigration.new(auth, setup, configuration).run
+        AuthenticationEventsMigration.new(system, setup, configuration).run
       end
 
       class AuthenticationEventsMigration < Migrations::Migration
         def run
-          auth_config = auth.configuration
+          auth_config = system.configuration
           config = self.config
           fk_name = (auth_config.singular_users_table_name+'_id').to_sym
 
@@ -56,7 +56,7 @@ module ROM::Auth
         def on_authentication_completed(data)
           super
 
-          ROM.env.command(configuration.table_name).try{
+          ROM.env.command(plugins[AuthenticationEventsPlugin].configuration.table_name).try{
             create(data)
           }
 

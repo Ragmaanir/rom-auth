@@ -7,7 +7,7 @@ module ROM::Auth
         attribute :table_name, Symbol, default: :authentication_credentials
       end
 
-      def install
+      def install(system)
         config = configuration
 
         @mapper = Class.new(ROM::Mapper) do
@@ -21,15 +21,16 @@ module ROM::Auth
       end
 
       def migrate(setup)
-        AuthenticationCredentialsMigration.new(auth.configuration, setup.connection).run
+        AuthenticationCredentialsMigration.new(system, setup, configuration).run
       end
 
       class AuthenticationCredentialsMigration < Migrations::Migration
         def run
           config = self.config
+          auth_config = system.configuration
 
           database.create_table(config.table_name) do
-            foreign_key(config.singular_users_table_name.to_sym, config.users_table_name.to_sym)
+            foreign_key(auth_config.singular_users_table_name.to_sym, auth_config.users_table_name.to_sym)
 
             String :password_verifier
             #add_constraint(:password_verifier_length, Sequel.function(:char_length, :password_verifier)=>64..255)

@@ -3,25 +3,31 @@ module ROM::Auth
     class Plugin
       include Support::ShorthandSymbol.strip(/Plugin/)
 
-      attr_reader :auth
+      attr_reader :system, :configuration
 
-      def initialize(auth, options={}, configurator)
-        @auth = auth
-        configure(&configurator)
+      def initialize(system, config)
+        #raise ArgumentError unless system.kind_of?(AuthenticationSystem)
+        @system = system
+        #configure(&configurator)
+        @configuration = config
       end
 
-      def configuration
-        @configuration ||= self.class.const_get(:Configuration).new
+      # def configuration
+      #   @configuration ||= self.class.const_get(:Configuration).new
+      # end
+
+      # def configure(&block)
+      #   @configuration = nil
+      #   block.call(configuration)
+      # end
+
+      def migrate(*args)
       end
 
-      def configure(&block)
-        @configuration = nil
-        block.call(configuration)
-      end
-
-      def install
+      def install(*args)
         raise NotImplementedError
       end
+
     end
   end
 end
