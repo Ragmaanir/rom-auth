@@ -6,8 +6,6 @@ module ROM
       attribute :users_table_name, Symbol, default: :users
       attribute :email_confirmation_token_length, Range
       attribute :cookie_authentication_token_length, Range
-      #attribute :authentication_credentials_table_name, Symbol, default: ->(c,_){ c.prefixed_table_name('authentication_credentials') }
-      #attribute :authentication_events_table_name, Symbol, default: ->(c,_){ c.prefixed_table_name('authentication_events') }
       attribute :instrumentation, Object, default: ->(c,_){ c.find_default_instrumentation }
       attribute :plugins, Hash, default: {}
 

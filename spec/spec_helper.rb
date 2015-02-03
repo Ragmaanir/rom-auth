@@ -29,6 +29,6 @@ RSpec.configure do |c|
   end
 
   c.before do
-    stub_const("ROM::Auth::PasswordVerifier::DEFAULT_OPTIONS", ROM::Auth::PasswordVerifier::DEFAULT_OPTIONS.merge(:iterations => 1))
+    stub_const("ROM::Auth::PasswordVerifiers::PasswordVerifier::DEFAULT_OPTIONS", ROM::Auth::PasswordVerifiers::PasswordVerifier::DEFAULT_OPTIONS.merge(:iterations => 1))
   end
 end

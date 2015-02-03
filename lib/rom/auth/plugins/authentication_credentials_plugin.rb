@@ -24,7 +24,7 @@ module ROM::Auth
         AuthenticationCredentialsMigration.new(system, setup, configuration).run
       end
 
-      class AuthenticationCredentialsMigration < Migrations::Migration
+      class AuthenticationCredentialsMigration < Migration
         def run
           config = self.config
           auth_config = system.configuration

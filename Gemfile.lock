@@ -32,7 +32,7 @@ GIT
 PATH
   remote: .
   specs:
-    rom-auth (1.0.0)
+    rom-auth (0.0.2)
       activesupport (~> 4.2)
       ice_nine (~> 0.11)
       rack (~> 1.6)

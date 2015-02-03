@@ -6,20 +6,10 @@ module ROM::Auth
       attr_reader :system, :configuration
 
       def initialize(system, config)
-        #raise ArgumentError unless system.kind_of?(AuthenticationSystem)
+        raise ArgumentError unless system.kind_of?(AuthenticationSystem)
         @system = system
-        #configure(&configurator)
         @configuration = config
       end
-
-      # def configuration
-      #   @configuration ||= self.class.const_get(:Configuration).new
-      # end
-
-      # def configure(&block)
-      #   @configuration = nil
-      #   block.call(configuration)
-      # end
 
       def migrate(*args)
       end

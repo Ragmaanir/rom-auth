@@ -32,7 +32,7 @@ module ROM::Auth
         AuthenticationEventsMigration.new(system, setup, configuration).run
       end
 
-      class AuthenticationEventsMigration < Migrations::Migration
+      class AuthenticationEventsMigration < Migration
         def run
           auth_config = system.configuration
           config = self.config

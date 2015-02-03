@@ -7,7 +7,7 @@ describe 'CommonPlugins' do
   end
 
   def password_verifier
-    ROM::Auth::PBKDF2Verifier.for_password(password)
+    ROM::Auth::PasswordVerifiers::PBKDF2Verifier.for_password(password)
   end
 
   before do

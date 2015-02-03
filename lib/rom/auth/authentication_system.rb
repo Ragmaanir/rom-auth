@@ -84,10 +84,6 @@ module ROM
         raise ArgumentError unless data.keys.to_set == [:user_id, :started_at, :ended_at, :authenticated, :authenticator, :success].to_set
         # TODO :reason ?
 
-        # ROM.env.command(configuration.login_events_table_name).try{
-        #   create(data)
-        # }
-
         instrument_authentication_event(data)
 
         # TODO

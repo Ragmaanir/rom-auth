@@ -1,11 +1,11 @@
-describe ROM::Auth::PBKDF2Verifier do
+describe ROM::Auth::PasswordVerifiers::PBKDF2Verifier do
 
   let(:password)  { 'somelongpw123,.-' }
   let(:salt)      { 'AAFF435' }
   let(:verifier)  { described_class.for_password(password, :salt => salt, :iterations => 2) }
 
   describe '#initialize' do
-    it { assert{ verifier.class == ROM::Auth::PBKDF2Verifier } }
+    it { assert{ verifier.class == ROM::Auth::PasswordVerifiers::PBKDF2Verifier } }
     it { assert{ verifier.salt == salt } }
     it { assert{ verifier.digest == PBKDF2.new(:password => password, :salt => salt, :iterations => 2).hex_string } }
   end
