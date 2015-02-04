@@ -5,7 +5,7 @@ module ROM
         include Virtus.value_object(coerce: false)
 
         values do
-          attribute :user_id, Integer
+          attribute :user_id, Integer # FIXME should be dynamic and could be account_id
           attribute :success, Boolean
           attribute :started_at, DateTime
           attribute :ended_at, DateTime

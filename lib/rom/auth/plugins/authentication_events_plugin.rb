@@ -1,6 +1,7 @@
 module ROM::Auth
   module Plugins
     class AuthenticationEventsPlugin < Plugin
+
       class Configuration
         include Virtus.model
 
@@ -67,6 +68,7 @@ module ROM::Auth
           #
         end
       end
+
     end
   end
 end

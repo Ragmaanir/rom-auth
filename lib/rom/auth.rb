@@ -21,6 +21,7 @@ require 'rom/auth/migration'
 require 'rom/auth/plugins/plugin'
 require 'rom/auth/plugins/authentication_events_plugin'
 require 'rom/auth/plugins/authentication_credentials_plugin'
+require 'rom/auth/plugins/lockdown_plugin'
 
 require 'rom/auth/models/user'
 require 'rom/auth/models/authentication_credential'

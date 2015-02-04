@@ -5,7 +5,13 @@ module ROM
         include Virtus.value_object(coerce: false)
 
         values do
-          # TODO user foreign key
+          attribute :user_id, Integer # FIXME this could be dynamic and could be account_id
+          attribute :created_at, DateTime
+          attribute :updated_at, DateTime
+          attribute :identifier, String
+          attribute :identifier_type, String
+          attribute :verifier, String
+          attribute :verifier_type, String
         end
       end
     end

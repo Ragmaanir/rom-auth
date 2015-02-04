@@ -2,6 +2,14 @@ describe ROM::Auth::Plugins::AuthenticationEventsPlugin do
   let(:setup)       { ROM.setup(:sql, "sqlite::memory") }
   let(:connection)  { setup.default.connection }
 
+  def password
+    'somepassword'
+  end
+
+  def password_verifier
+    ROM::Auth::PasswordVerifiers::PBKDF2Verifier.for_password(password)
+  end
+
   it '#configure plugin' do
     config = ROM::Auth::Configuration.new do |c|
       c.plugin(described_class) do |c|
@@ -29,7 +37,8 @@ describe ROM::Auth::Plugins::AuthenticationEventsPlugin do
 
     assert{
       setup.default.connection.schema(:lolerskates).map{|c| c.first} == [
-        :id, :user_id, :started_at, :ended_at, :authenticator, :authenticated, :success, :data
+        :id, :user_id, :started_at, :ended_at,
+        :authenticator, :authenticated, :success, :data
       ]
     }
   end
@@ -51,7 +60,7 @@ describe ROM::Auth::Plugins::AuthenticationEventsPlugin do
     rom = ROM.finalize.env
 
     connection[:users].insert(id: 1)
-    user = double(:user, id: 1)
+    user = double(:user, id: 1, password_verifier: password_verifier)
 
     auths = rom.read(:auth_events)
 
