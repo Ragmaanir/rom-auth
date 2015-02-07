@@ -23,10 +23,6 @@ require 'rom/auth/plugins/authentication_events_plugin'
 require 'rom/auth/plugins/authentication_credentials_plugin'
 require 'rom/auth/plugins/lockdown_plugin'
 
-require 'rom/auth/models/user'
-require 'rom/auth/models/authentication_credential'
-require 'rom/auth/models/authentication_event'
-
 require 'rom/auth/password_verifiers/password_verifier'
 require 'rom/auth/password_verifiers/pbkdf2_verifier'
 

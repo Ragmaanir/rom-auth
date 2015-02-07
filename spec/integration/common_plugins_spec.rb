@@ -15,6 +15,14 @@ describe 'CommonPlugins' do
       primary_key :id
     end
 
+    class User
+      include Virtus.value_object(coerce: false)
+
+      values do
+        attribute :id, Integer
+      end
+    end
+
     @users = Class.new(ROM::Relation[:sql]) do
       base_name :users
 
@@ -25,7 +33,7 @@ describe 'CommonPlugins' do
 
     @mapper = Class.new(ROM::Mapper) do
       relation(:users)
-      model(ROM::Auth::Models::User)
+      model(User) # FIXME
     end
   end
 
@@ -53,8 +61,6 @@ describe 'CommonPlugins' do
     )
 
     credentials = double(type: 'email', identifier: 'a@b.c.de', password: password)
-    #user = double(:user, id: 1, password_verifier: password_verifier)
-    #user = connection[:users].first
     user = rom.read(:users).first
 
     auths = rom.read(:authentication_events)

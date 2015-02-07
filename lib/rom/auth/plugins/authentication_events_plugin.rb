@@ -15,7 +15,7 @@ module ROM::Auth
 
         @mapper = Class.new(ROM::Mapper) do
           relation(config.table_name)
-          model(Models::AuthenticationEvent)
+          model(AuthenticationEvent)
         end
 
         @relation = Class.new(ROM::Relation[:sql]) do
@@ -31,6 +31,21 @@ module ROM::Auth
 
       def migrate(setup)
         AuthenticationEventsMigration.new(system, setup, configuration).run
+      end
+
+      class AuthenticationEvent
+        include Virtus.value_object(coerce: false)
+
+        values do
+          attribute :user_id, Integer # FIXME should be dynamic and could be account_id
+          attribute :success, Boolean
+          attribute :started_at, DateTime
+          attribute :ended_at, DateTime
+          attribute :identifier, String
+          attribute :type, String
+          attribute :authenticated, Boolean
+          attribute :data, String
+        end
       end
 
       class AuthenticationEventsMigration < Migration
