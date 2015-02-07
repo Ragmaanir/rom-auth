@@ -23,37 +23,47 @@ module ROM
         end
       end
 
-      def authenticate(type, user, data)
-        now = Time.now
-
-        on_authentication_attempt(type, user, data)
-
-        authenticated = run_authentication_check(type, user, data)
+      def authenticate(credentials)
         success = false
+        now = Time.now
+        user = identify_user(credentials)
 
-        if authenticated
-          on_authentication_success(type, user, data)
+        on_authentication_attempt(credentials)
 
-          if authentication_authorized?(user, type: type)
-            on_authorized_authentication(type, user, data)
-            success = true
+        if user
+          authenticated = run_authentication_check(credentials)
+
+          if authenticated
+            on_authentication_success(credentials)
+
+            if authentication_authorized?(credentials)
+              on_authorized_authentication(credentials)
+              success = true
+            else
+              on_unauthorized_authentication(credentials)
+            end
           else
-            on_unauthorized_authentication(type, user, data)
+            on_authentication_failure(credentials)
           end
         else
-          on_authentication_failure(type, user, data)
+          on_identification_failure(credentials)
         end
 
         on_authentication_completed(
-          user_id: user.id,
+          identifier: credentials.identifier,
+          user_id: user.try(:id),
           started_at: now,
           ended_at: Time.now,
-          authenticator: type.to_s,
+          type: credentials.type,
           authenticated: authenticated,
           success: success
         )
 
-        success
+        user if success
+      end
+
+      def inspect
+        "#<ROM::Auth::AuthenticationSystem plugins: #{plugins.keys}>"
       end
 
     private
@@ -64,24 +74,34 @@ module ROM
         end
 
         @plugins.each do |_type, plugin|
-          plugin.install(self)
+          plugin.install
         end
       end
 
-      def run_authentication_check(type, user, data)
-        authenticators[type].new.authenticate(user, data)
+      def identify_user(credentials)
+        raise NotImplementedError
       end
 
-      def authentication_authorized?(user, type: )
-        true
+      def run_authentication_check(credentials)
+        #authenticators[type].new.authenticate(user, data)
+        raise NotImplementedError
       end
 
-      def on_authentication_attempt(type, user, data)
+      def authentication_authorized?(credentials)
+        true # FIXME
+      end
+
+      def on_authentication_attempt(credentials)
+        configuration.logger.info("Attempt: #{credentials.identifier}")
+      end
+
+      def on_identification_failure(credentials)
+        configuration.logger.info("Identification failed: #{credentials.identifier}")
       end
 
       def on_authentication_completed(data)
         raise ArgumentError unless data.is_a?(Hash)
-        raise ArgumentError unless data.keys.to_set == [:user_id, :started_at, :ended_at, :authenticated, :authenticator, :success].to_set
+        #raise ArgumentError unless data.keys.to_set == [:identifier, :user_id, :started_at, :ended_at, :authenticated, :authenticator, :success].to_set
         # TODO :reason ?
 
         instrument_authentication_event(data)
@@ -93,16 +113,20 @@ module ROM
         #
       end
 
-      def on_authentication_failure(type, user, data)
+      def on_authentication_failure(credentials)
+        configuration.logger.info("Authentication failed: #{credentials.identifier}")
       end
 
-      def on_authentication_success(type, user, data)
+      def on_authentication_success(credentials)
+        configuration.logger.info("Authentication succeeded: #{credentials.identifier}")
       end
 
-      def on_unauthorized_authentication(type, user, data)
+      def on_unauthorized_authentication(credentials)
+        configuration.logger.info("Unauthorized: #{credentials.identifier}")
       end
 
-      def on_authorized_authentication(type, user, data)
+      def on_authorized_authentication(credentials)
+        configuration.logger.info("Authorized: #{credentials.identifier}")
       end
 
       def instrument_authentication_event(auth_data)

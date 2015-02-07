@@ -14,6 +14,19 @@ describe 'CommonPlugins' do
     connection.create_table(:users) do
       primary_key :id
     end
+
+    @users = Class.new(ROM::Relation[:sql]) do
+      base_name :users
+
+      def by_id(id)
+        where(id: id)
+      end
+    end
+
+    @mapper = Class.new(ROM::Mapper) do
+      relation(:users)
+      model(ROM::Auth::Models::User)
+    end
   end
 
   it '#authenticate' do
@@ -32,15 +45,25 @@ describe 'CommonPlugins' do
     rom = ROM.finalize.env
 
     connection[:users].insert(id: 1)
-    user = double(:user, id: 1, password_verifier: password_verifier)
+    connection[:authentication_credentials].insert(
+      user_id: 1,
+      type: 'email',
+      identifier: 'a@b.c.de',
+      verifier_data: password_verifier.to_s
+    )
+
+    credentials = double(type: 'email', identifier: 'a@b.c.de', password: password)
+    #user = double(:user, id: 1, password_verifier: password_verifier)
+    #user = connection[:users].first
+    user = rom.read(:users).first
 
     auths = rom.read(:authentication_events)
 
-    assert{ system.authenticate(:password, user, 'somepassword') }
+    assert{ system.authenticate(credentials) == user }
     assert{ auths.count == 1 }
 
     event = auths.first
-    assert{ event.authenticator == 'password' }
+    assert{ event.type == 'email' }
     assert{ event.authenticated == true }
     assert{ event.success == true }
     assert{ event.user_id == 1 }

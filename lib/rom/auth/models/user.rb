@@ -5,6 +5,7 @@ module ROM
         include Virtus.value_object(coerce: false)
 
         values do
+          attribute :id, Integer
           attribute :email, String
           attribute :password_verifier, String
         end

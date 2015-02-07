@@ -38,7 +38,7 @@ describe ROM::Auth::Plugins::AuthenticationEventsPlugin do
     assert{
       setup.default.connection.schema(:lolerskates).map{|c| c.first} == [
         :id, :user_id, :started_at, :ended_at,
-        :authenticator, :authenticated, :success, :data
+        :identifier, :type, :authenticated, :success, :data
       ]
     }
   end
@@ -60,11 +60,13 @@ describe ROM::Auth::Plugins::AuthenticationEventsPlugin do
     rom = ROM.finalize.env
 
     connection[:users].insert(id: 1)
+
+    credentials = double(type: :email, identifier: 'a@b.c.de', password: password)
     user = double(:user, id: 1, password_verifier: password_verifier)
 
     auths = rom.read(:auth_events)
 
-    assert{ system.authenticate(:password, user, 'somepassword') }
+    assert{ system.authenticate(credentials) }
     assert{ auths.count == 1 }
 
     event = auths.first

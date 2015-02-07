@@ -19,7 +19,7 @@ module ROM::Auth
         configuration.table_name ||= system.user_table_name
       end
 
-      def install(system)
+      def install
         config = configuration
 
         @mapper = Class.new(ROM::Mapper) do
@@ -43,6 +43,7 @@ module ROM::Auth
 
           database.alter_table(config.table_name) do
             add_column :locked_at, DateTime, default: nil, null: true
+            add_column :lock_reason, String, null: false
           end
         end
       end

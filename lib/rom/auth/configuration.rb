@@ -8,6 +8,7 @@ module ROM
       attribute :cookie_authentication_token_length, Range
       attribute :instrumentation, Object, default: ->(c,_){ c.find_default_instrumentation }
       attribute :plugins, Hash, default: {}
+      attribute :logger, Object, default: Logger.new(STDOUT)
 
       def initialize(*args, &block)
         super(*args)

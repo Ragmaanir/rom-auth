@@ -35,6 +35,8 @@ module ROM
         def self.from_s(string)
           kind, salt, digest, iterations = string.split(SEPARATOR)
 
+          raise(ArgumentError, "Invalid password verifyer kind: #{kind.inspect}") unless kind.in?(VERIFIERS.keys.map(&:to_s))
+
           VERIFIERS[kind.to_sym].new(DEFAULT_OPTIONS.merge(:digest => digest, :salt => salt, :iterations => iterations.to_i))
         end
 

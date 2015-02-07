@@ -8,7 +8,7 @@ module ROM::Auth
         attribute :table_name, Symbol, default: :authentication_events
       end
 
-      def install(system)
+      def install
         system.extend(CallbackOverrides)
 
         config = configuration
@@ -44,7 +44,8 @@ module ROM::Auth
             foreign_key(fk_name, auth_config.users_table_name.to_sym)
             DateTime  :started_at
             DateTime  :ended_at
-            String    :authenticator
+            String    :identifier
+            String    :type
             Boolean   :authenticated
             Boolean   :success
             String    :data

@@ -9,7 +9,8 @@ module ROM
           attribute :success, Boolean
           attribute :started_at, DateTime
           attribute :ended_at, DateTime
-          attribute :authenticator, String
+          attribute :identifier, String
+          attribute :type, String
           attribute :authenticated, Boolean
           attribute :data, String
         end
