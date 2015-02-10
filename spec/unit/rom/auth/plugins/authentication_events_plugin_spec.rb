@@ -43,11 +43,35 @@ describe ROM::Auth::Plugins::AuthenticationEventsPlugin do
     }
   end
 
-  it 'ROM::Auth#authenticate' do
+  it 'ROM::Auth::System#authenticate' do
     config = ROM::Auth::Configuration.new do |c|
+      c.plugin(ROM::Auth::Plugins::AuthenticationCredentialsPlugin) do
+      end
+
       c.plugin(described_class) do |c|
         c.table_name = :auth_events
       end
+    end
+
+    class User
+      include Virtus.value_object(coerce: false)
+
+      values do
+        attribute :id, Integer
+      end
+    end
+
+    @users = Class.new(ROM::Relation[:sql]) do
+      base_name :users
+
+      def by_id(id)
+        where(id: id)
+      end
+    end
+
+    @mapper = Class.new(ROM::Mapper) do
+      relation(:users)
+      model(User) # FIXME
     end
 
     connection.create_table(:users) do
@@ -60,8 +84,14 @@ describe ROM::Auth::Plugins::AuthenticationEventsPlugin do
     rom = ROM.finalize.env
 
     connection[:users].insert(id: 1)
+    connection[:authentication_credentials].insert(
+      user_id: 1,
+      type: 'email',
+      identifier: 'a@b.c.de',
+      verifier_data: password_verifier.to_s
+    )
 
-    credentials = double(type: :email, identifier: 'a@b.c.de', password: password)
+    credentials = double(type: 'email', identifier: 'a@b.c.de', password: password)
     user = double(:user, id: 1, password_verifier: password_verifier)
 
     auths = rom.read(:auth_events)
@@ -70,7 +100,7 @@ describe ROM::Auth::Plugins::AuthenticationEventsPlugin do
     assert{ auths.count == 1 }
 
     event = auths.first
-    assert{ event.authenticator == 'password' }
+    assert{ event.type == 'email' }
     assert{ event.authenticated == true }
     assert{ event.success == true }
     assert{ event.user_id == 1 }

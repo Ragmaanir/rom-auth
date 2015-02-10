@@ -26,6 +26,7 @@ Gem::Specification.new do |s|
   s.add_runtime_dependency 'ice_nine', '~> 0.11'
   #s.add_runtime_dependency 'descendants_tracker', '~> 0.0', '>= 0.0.4'
   #s.add_runtime_dependency 'pbkdf2', '~> 0.2.2', git: 'git://github.com/emerose/pbkdf2-ruby.git'
+  s.add_runtime_dependency 'logger-better', '~> 0.1'
 
   s.add_development_dependency "sqlite3", '~> 1.3'
   s.add_development_dependency "rspec", '~> 3.0'

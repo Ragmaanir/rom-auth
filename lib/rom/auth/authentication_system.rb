@@ -36,7 +36,7 @@ module ROM
           if authenticated
             on_authentication_success(credentials)
 
-            if authentication_authorized?(credentials)
+            if authentication_authorized?(user, credentials)
               on_authorized_authentication(credentials)
               success = true
             else
@@ -87,7 +87,7 @@ module ROM
         raise NotImplementedError
       end
 
-      def authentication_authorized?(credentials)
+      def authentication_authorized?(user, credentials)
         true # FIXME
       end
 

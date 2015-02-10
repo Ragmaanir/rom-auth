@@ -73,9 +73,10 @@ module ROM::Auth
         def on_authentication_completed(data)
           super
 
-          ROM.env.command(plugins[AuthenticationEventsPlugin].configuration.table_name).try{
-            create(data)
-          }
+          # ROM.env.command(plugins[AuthenticationEventsPlugin].configuration.table_name).try{
+          #   create(data)
+          # }
+          ROM.env.command(plugins[AuthenticationEventsPlugin].configuration.table_name).create.call(data)
 
           # TODO
           # - log origin/details & warn user

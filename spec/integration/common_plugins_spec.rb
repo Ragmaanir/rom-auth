@@ -44,6 +44,9 @@ describe 'CommonPlugins' do
 
       c.plugin(ROM::Auth::Plugins::AuthenticationEventsPlugin) do
       end
+
+      c.plugin(ROM::Auth::Plugins::LockdownPlugin) do
+      end
     end
 
     system = ROM::Auth::AuthenticationSystem.new(config)
@@ -73,5 +76,41 @@ describe 'CommonPlugins' do
     assert{ event.authenticated == true }
     assert{ event.success == true }
     assert{ event.user_id == 1 }
+  end
+
+  it '#authenticate lockdown' do
+    config = ROM::Auth::Configuration.new do |c|
+      c.plugin(ROM::Auth::Plugins::AuthenticationCredentialsPlugin) do
+      end
+
+      c.plugin(ROM::Auth::Plugins::AuthenticationEventsPlugin) do
+      end
+
+      c.plugin(ROM::Auth::Plugins::LockdownPlugin) do |c|
+        c.lock_strategy  = ->(plugin, user, credentials){
+          plugin.system.logger.info('LOCKING')
+        }
+      end
+    end
+
+    system = ROM::Auth::AuthenticationSystem.new(config)
+
+    system.migrate!(setup)
+
+    rom = ROM.finalize.env
+
+    connection[:users].insert(id: 1)
+    connection[:authentication_credentials].insert(
+      user_id: 1,
+      type: 'email',
+      identifier: 'a@b.c.de',
+      verifier_data: password_verifier.to_s
+    )
+
+    credentials = double(type: 'email', identifier: 'a@b.c.de', password: 'incorrect')
+
+    user = rom.read(:users).first
+
+    assert{ system.authenticate(credentials) == nil }
   end
 end
