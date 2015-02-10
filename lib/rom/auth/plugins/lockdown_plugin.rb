@@ -24,18 +24,18 @@ module ROM::Auth
 
         config = configuration
 
-        @mapper = Class.new(ROM::Mapper) do
-          relation(config.table_name)
-          model(Lockdown)
-        end
-
         @relation = Class.new(ROM::Relation[:sql]) do
           register_as :rom_auth_lockdowns
-          base_name(config.table_name)
+          dataset(config.table_name)
 
           def by_user_id(user_id)
             where(id: user_id)
           end
+        end
+
+        @mapper = Class.new(ROM::Mapper) do
+          relation(:rom_auth_lockdowns)
+          model(Lockdown)
         end
       end
 

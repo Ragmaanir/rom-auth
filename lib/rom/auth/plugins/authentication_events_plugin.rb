@@ -19,7 +19,7 @@ module ROM::Auth
         end
 
         @relation = Class.new(ROM::Relation[:sql]) do
-          base_name(config.table_name)
+          dataset(config.table_name)
         end
 
         @command = Class.new(ROM::Commands::Create[:sql]) do

@@ -24,7 +24,8 @@ describe 'CommonPlugins' do
     end
 
     @users = Class.new(ROM::Relation[:sql]) do
-      base_name :users
+      register_as :users
+      dataset :users
 
       def by_id(id)
         where(id: id)
@@ -32,8 +33,8 @@ describe 'CommonPlugins' do
     end
 
     @mapper = Class.new(ROM::Mapper) do
-      relation(:users)
-      model(User) # FIXME
+     relation(:users)
+     model(User) # FIXME
     end
   end
 

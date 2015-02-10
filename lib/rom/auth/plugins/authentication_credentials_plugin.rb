@@ -19,7 +19,7 @@ module ROM::Auth
         end
 
         @relation_cls = Class.new(ROM::Relation[:sql]) do
-          base_name(config.table_name)
+          dataset(config.table_name)
 
           def find_record(credentials)
             where(

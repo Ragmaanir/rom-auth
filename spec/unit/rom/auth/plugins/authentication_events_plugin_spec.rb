@@ -62,7 +62,7 @@ describe ROM::Auth::Plugins::AuthenticationEventsPlugin do
     end
 
     @users = Class.new(ROM::Relation[:sql]) do
-      base_name :users
+      dataset :users
 
       def by_id(id)
         where(id: id)
