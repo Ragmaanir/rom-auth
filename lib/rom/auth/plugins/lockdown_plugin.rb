@@ -10,8 +10,6 @@ module ROM::Auth
         attribute :unlock_strategy, Object
       end
 
-      attr_reader :lock_strategy, :unlock_strategy
-
       def initialize(*args)
         super
 
@@ -37,27 +35,37 @@ module ROM::Auth
           relation(:rom_auth_lockdowns)
           model(Lockdown)
         end
+
+        @command = Class.new(ROM::Commands::Update[:sql]) do
+          register_as :update
+          relation(:rom_auth_lockdowns)
+          result :one
+        end
       end
 
       def migrate(setup)
         LockdownMigration.new(system, setup, configuration).run
       end
 
-      def is_locked?(user)
+      def lock_strategy
+        configuration.lock_strategy
+      end
+
+      def unlock_strategy
+        configuration.unlock_strategy
+      end
+
+      def is_locked?(user_id)
         #user.locked_at.present?
-        ROM.env.relations[:rom_auth_lockdowns].by_user_id(user.id).first.try(:locked_at)
+        ROM.env.read(:rom_auth_lockdowns).by_user_id(user_id).first.try(:locked_at).present?
       end
 
-      def lock(user, reason)
-        ROM.env.commands.users.try {
-          users.update.all(id: user.id).set(locked_at: Time.now, lock_reason: reason)
-        }
+      def lock(user_id, reason)
+        ROM.env.command(:rom_auth_lockdowns).update.where(id: user_id).call(locked_at: Time.now, lock_reason: reason)
       end
 
-      def unlock(user)
-        ROM.env.commands.users.try {
-          users.update.all(id: user.id).set(locked_at: nil, lock_reason: nil)
-        }
+      def unlock(user_id)
+        ROM.env.command(:rom_auth_lockdowns).update.where(id: user_id).set(locked_at: nil, lock_reason: nil)
       end
 
       class LockdownMigration < Migration
@@ -83,12 +91,11 @@ module ROM::Auth
       end
 
       module CallbackOverrides
-
         def authentication_authorized?(user, credentials)
           plugin = plugins[LockdownPlugin]
 
           plugin.unlock_strategy.call(plugin, user, credentials) if plugin.lock_strategy
-          super && !plugin.is_locked?(user)
+          super && !plugin.is_locked?(user.id)
         end
 
         def on_authentication_completed(data)

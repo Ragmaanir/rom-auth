@@ -62,6 +62,10 @@ module ROM
         user if success
       end
 
+      def logger
+        configuration.logger
+      end
+
       def inspect
         "#<ROM::Auth::AuthenticationSystem plugins: #{plugins.keys}>"
       end

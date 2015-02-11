@@ -88,8 +88,9 @@ describe 'CommonPlugins' do
       end
 
       c.plugin(ROM::Auth::Plugins::LockdownPlugin) do |c|
-        c.lock_strategy  = ->(plugin, user, credentials){
-          plugin.system.logger.info('LOCKING')
+        c.lock_strategy  = ->(plugin, user_id, credentials){
+          #plugin.system.logger.info('LOCKING')
+          plugin.lock(user_id, 'Login failed')
         }
       end
     end
@@ -113,5 +114,20 @@ describe 'CommonPlugins' do
     user = rom.read(:users).first
 
     assert{ system.authenticate(credentials) == nil }
+
+    lock = rom.read(:rom_auth_lockdowns).first
+
+    assert{ lock.locked_at.close_to?(Time.now, 1) }
+    assert{ lock.lock_reason == 'Login failed' }
+
+    plugin = system.plugins[ROM::Auth::Plugins::LockdownPlugin]
+    assert{ plugin.is_locked?(lock.id) == true }
+
+    plugin.unlock(lock.id)
+    assert{ plugin.is_locked?(lock.id) == false }
+
+    lock = rom.read(:rom_auth_lockdowns).first
+    assert{ lock.locked_at == nil }
+    assert{ lock.lock_reason == nil }
   end
 end
