@@ -6,7 +6,7 @@ GIT
 
 GIT
   remote: git@github.com:rom-rb/rom-sql.git
-  revision: 224da179abc40606ed023192855fa05a3584b571
+  revision: 104e689beb07c1af30c6a872161791609bf487a2
   branch: master
   specs:
     rom-sql (0.3.2)
@@ -16,7 +16,7 @@ GIT
 
 GIT
   remote: git@github.com:rom-rb/rom.git
-  revision: 97107d887bbec6fb94fe38d451ae136fcaf00cd7
+  revision: ec112aff1f26e157b60ff9d5913e9089494a2f5a
   branch: master
   specs:
     rom (0.6.0)
