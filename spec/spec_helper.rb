@@ -19,15 +19,4 @@ RSpec.configure do |c|
     stub_const("ROM::Auth::PasswordVerifiers::PasswordVerifier::DEFAULT_OPTIONS", ROM::Auth::PasswordVerifiers::PasswordVerifier::DEFAULT_OPTIONS.merge(:iterations => 1))
   end
 
-  c.after do
-    [ROM::Relation, ROM::Mapper, ROM::Command].each { |klass|
-      clear_descendants(klass)
-    }
-  end
-
-  def clear_descendants(klass)
-    klass.descendants.each { |d| clear_descendants(d) }
-    klass.instance_variable_set('@descendants', [])
-  end
-
 end

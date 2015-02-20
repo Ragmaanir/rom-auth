@@ -61,6 +61,10 @@ describe ROM::Auth::Plugins::AuthenticationEventsPlugin do
       end
     end
 
+    connection.create_table(:users) do
+      primary_key :id
+    end
+
     @users = Class.new(ROM::Relation[:sql]) do
       dataset :users
 
@@ -72,10 +76,6 @@ describe ROM::Auth::Plugins::AuthenticationEventsPlugin do
     @mapper = Class.new(ROM::Mapper) do
       relation(:users)
       model(User) # FIXME
-    end
-
-    connection.create_table(:users) do
-      primary_key :id
     end
 
     system = ROM::Auth::AuthenticationSystem.new(config)
