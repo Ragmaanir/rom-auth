@@ -16,6 +16,7 @@ module ROM::Auth
         @mapper = Class.new(ROM::Mapper) do
           relation(config.table_name)
           model(AuthenticationEvent)
+          register_as :rom_auth_event
         end
 
         @relation = Class.new(ROM::Relation[:sql]) do

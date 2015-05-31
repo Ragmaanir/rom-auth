@@ -65,14 +65,14 @@ describe 'CommonPlugins' do
     )
 
     credentials = double(type: 'email', identifier: 'a@b.c.de', password: password)
-    user = rom.read(:users).first
+    user = rom.relation(:users).first
 
-    auths = rom.read(:authentication_events)
+    auths = rom.relation(:authentication_events)
 
     assert{ system.authenticate(credentials) == user }
-    assert{ auths.count == 1 }
+    assert{ auths.relation.count == 1 }
 
-    event = auths.first
+    event = auths.as(:rom_auth_event).first
     assert{ event.type == 'email' }
     assert{ event.authenticated == true }
     assert{ event.success == true }
@@ -111,11 +111,11 @@ describe 'CommonPlugins' do
 
     credentials = double(type: 'email', identifier: 'a@b.c.de', password: 'incorrect')
 
-    user = rom.read(:users).first
+    user = rom.relation(:users).first
 
     assert{ system.authenticate(credentials) == nil }
 
-    lock = rom.read(:rom_auth_lockdowns).first
+    lock = rom.relation(:rom_auth_lockdowns).as(:rom_auth_lockdown).first
 
     assert{ lock.locked_at.close_to?(Time.now, 1) }
     assert{ lock.lock_reason == 'Login failed' }
@@ -126,7 +126,7 @@ describe 'CommonPlugins' do
     plugin.unlock(lock.id)
     assert{ plugin.is_locked?(lock.id) == false }
 
-    lock = rom.read(:rom_auth_lockdowns).first
+    lock = rom.relation(:rom_auth_lockdowns).as(:rom_auth_lockdown).first
     assert{ lock.locked_at == nil }
     assert{ lock.lock_reason == nil }
   end

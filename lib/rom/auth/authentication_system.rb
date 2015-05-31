@@ -51,7 +51,7 @@ module ROM
 
         on_authentication_completed(
           identifier: credentials.identifier,
-          user_id: user.try(:id),
+          user_id: (user[:id] if user),
           started_at: now,
           ended_at: Time.now,
           type: credentials.type,

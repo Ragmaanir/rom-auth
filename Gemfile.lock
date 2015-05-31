@@ -6,22 +6,22 @@ GIT
 
 GIT
   remote: git@github.com:rom-rb/rom-sql.git
-  revision: b9082245ed2ea1fd381b3451a682639a8a94f18e
+  revision: b231c11c1cc0b520d7b15bc1b89761fd3b0b9ea5
   branch: master
   specs:
-    rom-sql (0.3.2)
+    rom-sql (0.5.1)
       equalizer (~> 0.0, >= 0.0.9)
-      rom (~> 0.6, >= 0.6.0)
+      rom (~> 0.7, >= 0.7.0)
       sequel (~> 4.18)
 
 GIT
   remote: git@github.com:rom-rb/rom.git
-  revision: a54c780b550b8197aa72802392fe17d3220f7259
+  revision: 9d9da0aba97baa407a52dcf91e25cf61a0317bef
   branch: master
   specs:
-    rom (0.6.0)
+    rom (0.7.1)
       equalizer (~> 0.0, >= 0.0.9)
-      transproc (~> 0.1)
+      transproc (~> 0.2, >= 0.2.2)
 
 PATH
   remote: .
@@ -55,7 +55,7 @@ GEM
     descendants_tracker (0.0.4)
       thread_safe (~> 0.3, >= 0.3.1)
     diff-lcs (1.2.5)
-    equalizer (0.0.9)
+    equalizer (0.0.11)
     i18n (0.7.0)
     ice_nine (0.11.1)
     json (1.8.2)
@@ -87,12 +87,12 @@ GEM
       sexp_processor (~> 4.0)
     ruby_parser (3.6.4)
       sexp_processor (~> 4.1)
-    sequel (4.19.0)
+    sequel (4.22.0)
     sexp_processor (4.4.5)
     slop (3.6.0)
     sqlite3 (1.3.10)
     thread_safe (0.3.4)
-    transproc (0.1.0)
+    transproc (0.2.2)
     tzinfo (1.2.2)
       thread_safe (~> 0.1)
     virtus (1.0.4)

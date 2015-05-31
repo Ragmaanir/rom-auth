@@ -34,6 +34,7 @@ module ROM::Auth
         @mapper = Class.new(ROM::Mapper) do
           relation(:rom_auth_lockdowns)
           model(Lockdown)
+          register_as :rom_auth_lockdown
         end
 
         @command = Class.new(ROM::Commands::Update[:sql]) do
@@ -57,15 +58,16 @@ module ROM::Auth
 
       def is_locked?(user_id)
         #user.locked_at.present?
-        ROM.env.read(:rom_auth_lockdowns).by_user_id(user_id).first.try(:locked_at).present?
+        ROM.env.relation(:rom_auth_lockdowns).by_user_id(user_id).as(:rom_auth_lockdown).first.try(:locked_at).present?
       end
 
       def lock(user_id, reason)
+        raise ArgumentError unless user_id.is_a?(Integer)
         ROM.env.command(:rom_auth_lockdowns).update.where(id: user_id).call(locked_at: Time.now, lock_reason: reason)
       end
 
       def unlock(user_id)
-        ROM.env.command(:rom_auth_lockdowns).update.where(id: user_id).set(locked_at: nil, lock_reason: nil)
+        ROM.env.command(:rom_auth_lockdowns).update.where(id: user_id).call(locked_at: nil, lock_reason: nil)
       end
 
       class LockdownMigration < Migration
@@ -94,8 +96,8 @@ module ROM::Auth
         def authentication_authorized?(user, credentials)
           plugin = plugins[LockdownPlugin]
 
-          plugin.unlock_strategy.call(plugin, user, credentials) if plugin.lock_strategy
-          super && !plugin.is_locked?(user.id)
+          plugin.unlock_strategy.call(plugin, user, credentials) if plugin.unlock_strategy
+          super && !plugin.is_locked?(user[:id])
         end
 
         def on_authentication_completed(data)

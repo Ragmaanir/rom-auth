@@ -94,12 +94,12 @@ describe ROM::Auth::Plugins::AuthenticationEventsPlugin do
     credentials = double(type: 'email', identifier: 'a@b.c.de', password: password)
     user = double(:user, id: 1, password_verifier: password_verifier)
 
-    auths = rom.read(:auth_events)
+    auths = rom.relation(:auth_events)
 
     assert{ system.authenticate(credentials) }
-    assert{ auths.count == 1 }
+    assert{ auths.relation.count == 1 }
 
-    event = auths.first
+    event = auths.as(:rom_auth_event).first
     assert{ event.type == 'email' }
     assert{ event.authenticated == true }
     assert{ event.success == true }
