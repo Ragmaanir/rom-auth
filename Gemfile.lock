@@ -1,28 +1,3 @@
-GIT
-  remote: git://github.com/emerose/pbkdf2-ruby.git
-  revision: f9a337e3559de7e61792f2c761a91ea57d53e095
-  specs:
-    pbkdf2 (0.2.2)
-
-GIT
-  remote: git@github.com:rom-rb/rom-sql.git
-  revision: b231c11c1cc0b520d7b15bc1b89761fd3b0b9ea5
-  branch: master
-  specs:
-    rom-sql (0.5.1)
-      equalizer (~> 0.0, >= 0.0.9)
-      rom (~> 0.7, >= 0.7.0)
-      sequel (~> 4.18)
-
-GIT
-  remote: git@github.com:rom-rb/rom.git
-  revision: 9d9da0aba97baa407a52dcf91e25cf61a0317bef
-  branch: master
-  specs:
-    rom (0.7.1)
-      equalizer (~> 0.0, >= 0.0.9)
-      transproc (~> 0.2, >= 0.2.2)
-
 PATH
   remote: .
   specs:
@@ -30,13 +5,16 @@ PATH
       activesupport (~> 4.2)
       ice_nine (~> 0.11)
       logger-better (~> 0.1)
+      pbkdf2-ruby (~> 0.2.1)
       rack (~> 1.6)
+      rom (~> 0.7.1)
+      rom-sql (~> 0.5)
       virtus (~> 1.0)
 
 GEM
   remote: https://rubygems.org/
   specs:
-    activesupport (4.2.0)
+    activesupport (4.2.1)
       i18n (~> 0.7)
       json (~> 1.7, >= 1.7.7)
       minitest (~> 5.1)
@@ -58,17 +36,25 @@ GEM
     equalizer (0.0.11)
     i18n (0.7.0)
     ice_nine (0.11.1)
-    json (1.8.2)
-    logger-better (0.1.3)
+    json (1.8.3)
+    logger-better (0.2.1)
     method_source (0.8.2)
-    minitest (5.5.1)
+    minitest (5.7.0)
     minitest-stub-const (0.3)
+    pbkdf2-ruby (0.2.1)
     predicated (0.2.6)
     pry (0.10.1)
       coderay (~> 1.1.0)
       method_source (~> 0.8.1)
       slop (~> 3.4)
-    rack (1.6.0)
+    rack (1.6.1)
+    rom (0.7.1)
+      equalizer (~> 0.0, >= 0.0.9)
+      transproc (~> 0.2, >= 0.2.2)
+    rom-sql (0.5.1)
+      equalizer (~> 0.0, >= 0.0.9)
+      rom (~> 0.7, >= 0.7.0)
+      sequel (~> 4.18)
     rspec (3.2.0)
       rspec-core (~> 3.2.0)
       rspec-expectations (~> 3.2.0)
@@ -87,15 +73,15 @@ GEM
       sexp_processor (~> 4.0)
     ruby_parser (3.6.4)
       sexp_processor (~> 4.1)
-    sequel (4.22.0)
+    sequel (4.23.0)
     sexp_processor (4.4.5)
     slop (3.6.0)
     sqlite3 (1.3.10)
-    thread_safe (0.3.4)
-    transproc (0.2.2)
+    thread_safe (0.3.5)
+    transproc (0.2.3)
     tzinfo (1.2.2)
       thread_safe (~> 0.1)
-    virtus (1.0.4)
+    virtus (1.0.5)
       axiom-types (~> 0.1)
       coercible (~> 1.0)
       descendants_tracker (~> 0.0, >= 0.0.3)
@@ -113,11 +99,8 @@ PLATFORMS
 DEPENDENCIES
   binding_of_caller (~> 0.7)
   minitest-stub-const (~> 0.3)
-  pbkdf2 (~> 0.2.2)!
   pry (~> 0.9)
-  rom!
   rom-auth!
-  rom-sql!
   rspec (~> 3.0)
   sqlite3 (~> 1.3)
   wrong (~> 0.7)

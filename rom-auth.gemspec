@@ -18,14 +18,13 @@ Gem::Specification.new do |s|
   s.required_ruby_version     = "~> 2.1"
   s.rubyforge_project         = "rom-auth"
 
-  #s.add_runtime_dependency 'rom', '~> 0.5'
-  #s.add_runtime_dependency 'rom-sql', '~> 0.3.2'
+  s.add_runtime_dependency 'rom', '~> 0.7.1'
+  s.add_runtime_dependency 'rom-sql', '~> 0.5'
   s.add_runtime_dependency 'rack', '~> 1.6'
   s.add_runtime_dependency 'activesupport', '~> 4.2'
   s.add_runtime_dependency 'virtus', '~> 1.0'
   s.add_runtime_dependency 'ice_nine', '~> 0.11'
-  #s.add_runtime_dependency 'descendants_tracker', '~> 0.0', '>= 0.0.4'
-  #s.add_runtime_dependency 'pbkdf2', '~> 0.2.2', git: 'git://github.com/emerose/pbkdf2-ruby.git'
+  s.add_runtime_dependency 'pbkdf2-ruby', '~> 0.2.1'
   s.add_runtime_dependency 'logger-better', '~> 0.1'
 
   s.add_development_dependency "sqlite3", '~> 1.3'
