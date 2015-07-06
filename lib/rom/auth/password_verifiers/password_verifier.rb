@@ -11,12 +11,13 @@ module ROM
         attr_reader :salt, :digest, :options
 
         def verifies?(plaintext_password)
-          # SECURITY timing attack
-          self.digest == compute_digest(plaintext_password, salt, options)
+          tested_digest = compute_digest(plaintext_password, salt, options)
+
+          digest == tested_digest
         end
 
         def to_s
-          [type, salt, digest, options[:iterations]].join(SEPARATOR)
+          [type, salt, digest.to_s, options[:iterations]].join(SEPARATOR)
         end
 
         def ==(other)
@@ -35,7 +36,7 @@ module ROM
         def self.from_s(string)
           kind, salt, digest, iterations = string.split(SEPARATOR)
 
-          raise(ArgumentError, "Invalid password verifyer kind: #{kind.inspect}") unless kind.in?(VERIFIERS.keys.map(&:to_s))
+          raise(ArgumentError, "Invalid password verifier kind: #{kind.inspect}") unless VERIFIERS.keys.map(&:to_s).include?(kind)
 
           VERIFIERS[kind.to_sym].new(DEFAULT_OPTIONS.merge(:digest => digest, :salt => salt, :iterations => iterations.to_i))
         end
@@ -47,7 +48,11 @@ module ROM
 
           @options  = DEFAULT_OPTIONS.merge(options)
           @salt     = @options.delete(:salt) || generate_random_salt(@options.delete(:salt_length))
-          @digest   = @options.delete(:digest) || compute_digest(@options[:password], @salt, @options)
+          @digest   = if digest_str = @options.delete(:digest)
+            Digest.new(digest_str)
+          else
+            compute_digest(@options[:password], @salt, @options)
+          end
         end
 
         def compute_digest(plaintext_password, salt, options={})

@@ -2,9 +2,8 @@ PATH
   remote: .
   specs:
     rom-auth (0.0.4)
-      activesupport (~> 4.2)
+      activesupport (>= 3.2)
       ice_nine (~> 0.11)
-      logger-better (~> 0.1)
       pbkdf2-ruby (~> 0.2.1)
       rack (~> 1.6)
       rom (~> 0.7.1)
@@ -37,7 +36,6 @@ GEM
     i18n (0.7.0)
     ice_nine (0.11.1)
     json (1.8.3)
-    logger-better (0.2.1)
     method_source (0.8.2)
     minitest (5.7.0)
     minitest-stub-const (0.3)

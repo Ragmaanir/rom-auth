@@ -17,7 +17,7 @@ describe ROM::Auth::Plugins::AuthenticationEventsPlugin do
       end
     end
 
-    system = ROM::Auth::AuthenticationSystem.new(config)
+    system = ROM::Auth::System.new(config)
 
     assert{ system.plugins.keys == [described_class] }
     assert{ system.plugins[described_class].configuration.table_name == :lolerskates }
@@ -30,7 +30,7 @@ describe ROM::Auth::Plugins::AuthenticationEventsPlugin do
       end
     end
 
-    system = ROM::Auth::AuthenticationSystem.new(config)
+    system = ROM::Auth::System.new(config)
     system.migrate!(setup)
 
     ROM.finalize
@@ -78,7 +78,7 @@ describe ROM::Auth::Plugins::AuthenticationEventsPlugin do
       model(User) # FIXME
     end
 
-    system = ROM::Auth::AuthenticationSystem.new(config)
+    system = ROM::Auth::System.new(config)
     system.migrate!(setup)
 
     rom = ROM.finalize.env

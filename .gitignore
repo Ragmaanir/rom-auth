@@ -1,4 +1,7 @@
+
+.ruby-version
+tmp
+
 *.sublime-project
 *.sublime-workspace
-tmp
 

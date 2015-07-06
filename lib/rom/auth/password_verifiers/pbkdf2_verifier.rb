@@ -14,7 +14,8 @@ module ROM
       protected
 
         def compute_digest(plaintext_password, salt, options={})
-          PBKDF2.new(options.merge(:password => plaintext_password, :salt => salt)).hex_string
+          hex = PBKDF2.new(options.merge(:password => plaintext_password, :salt => salt)).hex_string
+          Digest.new(hex)
         end
 
       end

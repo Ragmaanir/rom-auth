@@ -60,7 +60,7 @@ module ROM::Auth
           attribute :identifier, String
           attribute :type, String
           attribute :verifier_data, String
-          attribute :verifier_type, String
+          #attribute :verifier_type, String
         end
 
         def verifier
@@ -73,10 +73,10 @@ module ROM::Auth
           config = self.config
           auth_config = system.configuration
 
-          fk = (auth_config.singular_users_table_name+'_id').to_sym
+          user_fk_name = auth_config.user_fk_name
 
           database.create_table(config.table_name) do
-            foreign_key(fk, auth_config.users_table_name.to_sym)
+            foreign_key(user_fk_name, auth_config.users_table_name.to_sym)
 
             String :identifier
             String :type

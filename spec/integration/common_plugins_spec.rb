@@ -33,12 +33,41 @@ describe 'CommonPlugins' do
     end
 
     @mapper = Class.new(ROM::Mapper) do
-     relation(:users)
-     model(User) # FIXME
+      relation(:users)
+      model(User) # FIXME
     end
   end
 
-  it '#authenticate' do
+  it '#authenticate with AuthenticationCredentialsPlugin' do
+    config = ROM::Auth::Configuration.new do |c|
+      c.plugin(ROM::Auth::Plugins::AuthenticationCredentialsPlugin) do
+      end
+
+      c.plugin(ROM::Auth::Plugins::AuthenticationEventsPlugin) do
+      end
+    end
+
+    system = ROM::Auth::System.new(config)
+
+    system.migrate!(setup)
+
+    rom = ROM.finalize.env
+
+    connection[:users].insert(id: 1)
+    connection[:authentication_credentials].insert(
+      user_id: 1,
+      type: 'email',
+      identifier: 'a@b.c.de',
+      verifier_data: password_verifier.to_s
+    )
+
+    credentials = double(type: 'email', identifier: 'a@b.c.de', password: password)
+    user = rom.relation(:users).first
+
+    assert{ system.authenticate(credentials) == user }
+  end
+
+  it '#authenticate with AuthenticationEventsPlugin' do
     config = ROM::Auth::Configuration.new do |c|
       c.plugin(ROM::Auth::Plugins::AuthenticationCredentialsPlugin) do
       end
@@ -50,7 +79,7 @@ describe 'CommonPlugins' do
       end
     end
 
-    system = ROM::Auth::AuthenticationSystem.new(config)
+    system = ROM::Auth::System.new(config)
 
     system.migrate!(setup)
 
@@ -79,7 +108,7 @@ describe 'CommonPlugins' do
     assert{ event.user_id == 1 }
   end
 
-  it '#authenticate lockdown' do
+  it '#authenticate with LockdownPlugin' do
     config = ROM::Auth::Configuration.new do |c|
       c.plugin(ROM::Auth::Plugins::AuthenticationCredentialsPlugin) do
       end
@@ -95,7 +124,7 @@ describe 'CommonPlugins' do
       end
     end
 
-    system = ROM::Auth::AuthenticationSystem.new(config)
+    system = ROM::Auth::System.new(config)
 
     system.migrate!(setup)
 

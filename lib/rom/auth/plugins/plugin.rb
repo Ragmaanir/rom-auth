@@ -1,12 +1,11 @@
 module ROM::Auth
   module Plugins
     class Plugin
-      include Support::ShorthandSymbol.strip(/Plugin/)
 
       attr_reader :system, :configuration
 
       def initialize(system, config)
-        raise ArgumentError unless system.kind_of?(AuthenticationSystem)
+        raise ArgumentError unless system.kind_of?(System)
         @system = system
         @configuration = config
       end

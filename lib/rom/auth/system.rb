@@ -1,6 +1,6 @@
 module ROM
   module Auth
-    class AuthenticationSystem
+    class System
 
       attr_reader :configuration, :plugins
 
@@ -17,13 +17,15 @@ module ROM
         end
       end
 
-      def authenticators
-        Authenticators::Authenticator.descendants.inject({}) do |acc, desc|
-          acc.merge(desc.shorthand_symbol => desc)
-        end
-      end
+      # def authenticators
+      #   Authenticators::Authenticator.descendants.inject({}) do |acc, desc|
+      #     acc.merge(desc.shorthand_symbol => desc)
+      #   end
+      # end
 
       def authenticate(credentials)
+        raise ArgumentError unless credentials
+
         success = false
         now = Time.now
         user = identify_user(credentials)

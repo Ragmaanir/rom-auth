@@ -53,11 +53,11 @@ module ROM::Auth
         def run
           auth_config = system.configuration
           config = self.config
-          fk_name = (auth_config.singular_users_table_name+'_id').to_sym
+          user_fk_name = auth_config.user_fk_name
 
           database.create_table(config.table_name) do
             primary_key :id
-            foreign_key(fk_name, auth_config.users_table_name.to_sym)
+            foreign_key(user_fk_name, auth_config.users_table_name.to_sym)
             DateTime  :started_at
             DateTime  :ended_at
             String    :identifier

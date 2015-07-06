@@ -28,17 +28,18 @@ module ROM
         self.plugins = plugins.merge(cls => config)
       end
 
-      def prefixed_table_name(name)
-        [singular_users_table_name,name].join('_').to_sym
+      def find_default_instrumentation
+        ActiveSupport::Notifications
       end
 
       def singular_users_table_name
         users_table_name.to_s.singularize
       end
 
-      def find_default_instrumentation
-        ActiveSupport::Notifications
+      def user_fk_name
+        [singular_users_table_name, :id].join('_').to_sym
       end
+
     end
   end
 end

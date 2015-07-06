@@ -8,7 +8,10 @@ FIX (describe your package)
 
 == FEATURES/PROBLEMS:
 
-* FIX (list of features or problems)
+* authentication of users via passwords
+* Plugins
+* A plugin for storing authentication attempts and their success/failure
+* A lockdown plugin for locking down user accounts on authentication failure
 
 == SYNOPSIS:
 

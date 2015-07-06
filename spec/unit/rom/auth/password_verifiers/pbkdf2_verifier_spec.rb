@@ -7,7 +7,9 @@ describe ROM::Auth::PasswordVerifiers::PBKDF2Verifier do
   describe '#initialize' do
     it { assert{ verifier.class == ROM::Auth::PasswordVerifiers::PBKDF2Verifier } }
     it { assert{ verifier.salt == salt } }
-    it { assert{ verifier.digest == PBKDF2.new(:password => password, :salt => salt, :iterations => 2).hex_string } }
+    it { assert{ verifier.digest.is_a?(ROM::Auth::Digest) } }
+    it { assert{ verifier.digest.to_s == PBKDF2.new(:password => password, :salt => salt, :iterations => 2).hex_string } }
+    it { assert{ verifier.verifies?(password) } }
   end
 
   describe '#to_s' do
