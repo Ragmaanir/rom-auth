@@ -98,11 +98,11 @@ module ROM
       end
 
       def on_authentication_attempt(credentials)
-        configuration.logger.info("Attempt: #{credentials.identifier}")
+        logger.info("Attempt: #{credentials.identifier}")
       end
 
       def on_identification_failure(credentials)
-        configuration.logger.info("Identification failed: #{credentials.identifier}")
+        logger.info("Identification failed: #{credentials.identifier}")
       end
 
       def on_authentication_completed(data)
@@ -120,19 +120,19 @@ module ROM
       end
 
       def on_authentication_failure(credentials)
-        configuration.logger.info("Authentication failed: #{credentials.identifier}")
+        logger.info("Authentication failed: #{credentials.identifier}")
       end
 
       def on_authentication_success(credentials)
-        configuration.logger.info("Authentication succeeded: #{credentials.identifier}")
+        logger.info("Authentication succeeded: #{credentials.identifier}")
       end
 
       def on_unauthorized_authentication(credentials)
-        configuration.logger.info("Unauthorized: #{credentials.identifier}")
+        logger.info("Unauthorized: #{credentials.identifier}")
       end
 
       def on_authorized_authentication(credentials)
-        configuration.logger.info("Authorized: #{credentials.identifier}")
+        logger.info("Authorized: #{credentials.identifier}")
       end
 
       def instrument_authentication_event(auth_data)
