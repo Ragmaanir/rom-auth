@@ -9,7 +9,12 @@ describe ROM::Auth::PasswordVerifiers::PBKDF2Verifier do
     it { assert{ verifier.salt == salt } }
     it { assert{ verifier.digest.is_a?(ROM::Auth::Digest) } }
     it { assert{ verifier.digest.to_s == PBKDF2.new(:password => password, :salt => salt, :iterations => 2).hex_string } }
+  end
+
+  describe '#verifies' do
     it { assert{ verifier.verifies?(password) } }
+    it { assert{ !verifier.verifies?('incorrect password') } }
+    it { assert{ !verifier.verifies?('') } }
   end
 
   describe '#to_s' do
