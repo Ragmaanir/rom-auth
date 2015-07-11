@@ -33,6 +33,7 @@ describe ROM::Auth::System do
 
   it '#authenticate' do
     config = ROM::Auth::Configuration.new do |c|
+      c.plugin(ROM::Auth::Plugins::AuthenticationCredentialsPlugin)
     end
 
     system = ROM::Auth::System.new(config)
