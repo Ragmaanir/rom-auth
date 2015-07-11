@@ -1,34 +1,34 @@
-= rom-auth
+# rom-auth
 
-* FIX (url)
+* https://github.com/Ragmaanir/rom-auth
 
-== DESCRIPTION:
+## DESCRIPTION:
 
 Low level Authentication solution based on [ROM](rom-rb.org). It is based on plugins and only supposed to do database-oriented authentication of users. It is completely independent of HTTP/Rails.
 
-== FEATURES/PROBLEMS:
+## FEATURES/PROBLEMS:
 
 * authentication of users via passwords
 * Plugins
 * A plugin for storing authentication attempts and their success/failure
 * A lockdown plugin for locking down user accounts on authentication failure
 
-== SYNOPSIS:
+## SYNOPSIS:
 
   * TODO
 
-== REQUIREMENTS:
+## REQUIREMENTS:
 
 * activesupport
 * rom
 * pbkdf2
 * virtus
 
-== INSTALL:
+## INSTALL:
 
 * gem install rom-auth
 
-== DEVELOPERS:
+## DEVELOPERS:
 
 After checking out the source, run:
 
@@ -37,7 +37,7 @@ After checking out the source, run:
 This task will install any missing dependencies, run the tests/specs,
 and generate the RDoc.
 
-== LICENSE:
+## LICENSE:
 
 (The MIT License)
 
