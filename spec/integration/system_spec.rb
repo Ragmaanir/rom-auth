@@ -3,6 +3,14 @@ describe ROM::Auth::System do
   let(:setup)       { ROM.setup(:sql, "sqlite::memory") }
   let(:connection)  { setup.default.connection }
 
+  def password
+    'somepassword'
+  end
+
+  def password_verifier
+    ROM::Auth::PasswordVerifiers::PBKDF2Verifier.for_password(password)
+  end
+
   before do
     connection.create_table(:users) do
       primary_key :id
@@ -38,11 +46,23 @@ describe ROM::Auth::System do
 
     system = ROM::Auth::System.new(config)
 
+    system.migrate!(setup)
+
+    rom = ROM.finalize.env
+
     expect{ system.authenticate(nil) }.to raise_error
 
-    creds = OpenStruct.new(identifier: 'test', password: 'test')
+    connection[:users].insert(id: 1)
+    connection[:authentication_credentials].insert(
+      user_id: 1,
+      type: 'email',
+      identifier: 'a@b.c.de',
+      verifier_data: password_verifier.to_s
+    )
 
-    system.authenticate(creds)
+    creds = OpenStruct.new(identifier: 'a@b.c.de', type: 'email', password: password)
+
+    assert{ system.authenticate(creds) }
   end
 
 end

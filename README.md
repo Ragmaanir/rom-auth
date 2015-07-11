@@ -4,7 +4,7 @@
 
 == DESCRIPTION:
 
-FIX (describe your package)
+Low level Authentication solution based on [ROM](rom-rb.org). It is based on plugins and only supposed to do database-oriented authentication of users. It is completely independent of HTTP/Rails.
 
 == FEATURES/PROBLEMS:
 
@@ -15,15 +15,18 @@ FIX (describe your package)
 
 == SYNOPSIS:
 
-  FIX (code sample of usage)
+  * TODO
 
 == REQUIREMENTS:
 
-* FIX (list of requirements)
+* activesupport
+* rom
+* pbkdf2
+* virtus
 
 == INSTALL:
 
-* FIX (sudo gem install, anything else)
+* gem install rom-auth
 
 == DEVELOPERS:
 
@@ -38,7 +41,7 @@ and generate the RDoc.
 
 (The MIT License)
 
-Copyright (c) 2015 FIX
+Copyright (c) 2015 Ragmaanir
 
 Permission is hereby granted, free of charge, to any person obtaining
 a copy of this software and associated documentation files (the

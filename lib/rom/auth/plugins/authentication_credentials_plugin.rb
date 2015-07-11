@@ -23,6 +23,7 @@ module ROM::Auth
           dataset(config.table_name)
 
           def find_record(credentials)
+            raise if !credentials.respond_to?(:type) || !credentials.respond_to?(:identifier)
             where(
               type: credentials.type,
               identifier: credentials.identifier

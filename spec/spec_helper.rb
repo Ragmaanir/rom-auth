@@ -5,6 +5,7 @@ require "rom-auth"
 
 ENV['ROM_AUTH_ENV'] = 'test'
 
+
 RSpec.configure do |c|
   include Wrong::Assert
   Wrong.config.colors
@@ -17,6 +18,11 @@ RSpec.configure do |c|
     conn.tables.each{ |t| conn.drop_table?(t) }
 
     stub_const("ROM::Auth::PasswordVerifiers::PasswordVerifier::DEFAULT_OPTIONS", ROM::Auth::PasswordVerifiers::PasswordVerifier::DEFAULT_OPTIONS.merge(:iterations => 1))
+  end
+
+  c.after do
+    conn = Sequel.connect('sqlite:memory')
+    conn.tables.each{ |t| conn.drop_table?(t) }
   end
 
 end

@@ -5,7 +5,6 @@ PATH
       activesupport (>= 3.2)
       ice_nine (~> 0.11)
       pbkdf2-ruby (~> 0.2.1)
-      rack (~> 1.6)
       rom (~> 0.7.1)
       rom-sql (~> 0.5)
       virtus (~> 1.0)
@@ -13,7 +12,7 @@ PATH
 GEM
   remote: https://rubygems.org/
   specs:
-    activesupport (4.2.1)
+    activesupport (4.2.3)
       i18n (~> 0.7)
       json (~> 1.7, >= 1.7.7)
       minitest (~> 5.1)
@@ -45,7 +44,6 @@ GEM
       coderay (~> 1.1.0)
       method_source (~> 0.8.1)
       slop (~> 3.4)
-    rack (1.6.1)
     rom (0.7.1)
       equalizer (~> 0.0, >= 0.0.9)
       transproc (~> 0.2, >= 0.2.2)
@@ -71,12 +69,12 @@ GEM
       sexp_processor (~> 4.0)
     ruby_parser (3.6.4)
       sexp_processor (~> 4.1)
-    sequel (4.23.0)
+    sequel (4.24.0)
     sexp_processor (4.4.5)
     slop (3.6.0)
     sqlite3 (1.3.10)
     thread_safe (0.3.5)
-    transproc (0.2.3)
+    transproc (0.2.4)
     tzinfo (1.2.2)
       thread_safe (~> 0.1)
     virtus (1.0.5)
@@ -102,3 +100,6 @@ DEPENDENCIES
   rspec (~> 3.0)
   sqlite3 (~> 1.3)
   wrong (~> 0.7)
+
+BUNDLED WITH
+   1.10.5
